@@ -10,6 +10,9 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { Toaster } from "sonner";
+import { CartProvider } from "@/lib/cart";
+import { Navbar, Footer } from "@/components/Layout";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -81,16 +84,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Vintage Made — Vintage Luxury Watches" },
+      { name: "description", content: "Curated, restored vintage luxury watches." },
+      { property: "og:title", content: "Vintage Made — Vintage Luxury Watches" },
+      { property: "og:description", content: "Curated, restored vintage luxury watches." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Karla:ital,wght@0,400;0,600;1,400&family=Oswald:wght@500;700&display=swap" },
       {
         rel: "stylesheet",
         href: appCss,
@@ -124,7 +129,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <CartProvider>
+        <div className="flex min-h-screen flex-col">
+          <Navbar />
+          <main className="flex-1"><Outlet /></main>
+          <Footer />
+        </div>
+        <Toaster theme="dark" position="bottom-right" />
+      </CartProvider>
     </QueryClientProvider>
   );
 }
