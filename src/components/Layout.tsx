@@ -13,8 +13,10 @@ export function Navbar() {
   const { count } = useCart();
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-espresso/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="font-display text-xl uppercase tracking-[0.25em]">Vintage<span className="text-gold">.</span>Made</Link>
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
+        <Link to="/" aria-label="Hunain Watches home" className="flex shrink-0 items-center">
+          <img src="/hunain-watch-logo.webp" alt="Hunain Watches — Timeless Elegance" className="h-[4.5rem] w-auto max-w-[9rem] object-contain sm:max-w-[10rem]" />
+        </Link>
         <nav className="hidden gap-8 md:flex">
           {links.map((l) => (
             <Link key={l.to} to={l.to} activeOptions={{ exact: l.to === "/" }}
@@ -49,7 +51,9 @@ export function Footer() {
     <footer className="mt-24 border-t border-border bg-espresso">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
         <div>
-          <p className="font-display text-lg uppercase tracking-[0.25em]">Vintage<span className="text-gold">.</span>Made</p>
+          <Link to="/" aria-label="Hunain Watches home" className="inline-flex items-center">
+            <img src="/hunain-watch-logo.webp" alt="Hunain Watches — Timeless Elegance" className="h-28 w-auto max-w-[12rem] object-contain" />
+          </Link>
           <p className="mt-3 text-sm text-muted-foreground">Restored vintage timepieces, curated and serviced by hand since 1987.</p>
         </div>
         <FooterCol title="Shop" items={[["/shop", "All watches"], ["/cart", "Cart"], ["/checkout", "Checkout"]]} />
