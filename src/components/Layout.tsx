@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, ShoppingBag, User, X } from "lucide-react";
+import { Menu, ShoppingBag, User, X, LogOut } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { useCart } from "@/lib/cart";
+import { useAuth } from "@/lib/auth";
+import { toast } from "sonner";
 
 const links = [
   { to: "/", label: "Home" }, { to: "/shop", label: "Shop" },
@@ -11,6 +13,18 @@ const links = [
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
+  const { user, signOut } = useAuth();
+
+  const logout = async () => {
+    try {
+      await signOut();
+      toast.success("You have been logged out.");
+      setOpen(false);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not log out.");
+    }
+  };
+
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-espresso/95 backdrop-blur">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
@@ -25,7 +39,14 @@ export function Navbar() {
           ))}
         </nav>
         <div className="flex items-center gap-4">
-          <Link to="/login" aria-label="Account" className="hidden hover:text-gold sm:block"><User className="h-5 w-5" /></Link>
+          {user ? (
+            <div className="hidden items-center gap-3 sm:flex">
+              <span className="max-w-36 truncate text-xs text-muted-foreground">{user.user_metadata?.full_name || user.email}</span>
+              <button type="button" onClick={logout} aria-label="Logout" title="Logout" className="hover:text-gold"><LogOut className="h-5 w-5" /></button>
+            </div>
+          ) : (
+            <Link to="/login" aria-label="Account" className="hidden hover:text-gold sm:block"><User className="h-5 w-5" /></Link>
+          )}
           <Link to="/cart" aria-label="Cart" className="relative hover:text-gold">
             <ShoppingBag className="h-5 w-5" />
             {count > 0 && <span className="absolute -right-2 -top-2 grid h-4 min-w-4 place-items-center rounded-full bg-gold px-1 text-[10px] font-bold text-primary-foreground">{count}</span>}
@@ -37,9 +58,18 @@ export function Navbar() {
       </div>
       {open && (
         <nav className="flex flex-col border-t border-border bg-espresso px-4 py-4 md:hidden">
-          {[...links, { to: "/login", label: "Login" } as const, { to: "/register", label: "Register" } as const].map((l) => (
-            <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="py-3 text-sm uppercase tracking-[0.2em]" activeProps={{ className: "text-gold" }}>{l.label}</Link>
-          ))}
+          {links.map((l) => <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="py-3 text-sm uppercase tracking-[0.2em]" activeProps={{ className: "text-gold" }}>{l.label}</Link>)}
+          {user ? (
+            <>
+              <span className="py-3 text-sm text-muted-foreground">{user.user_metadata?.full_name || user.email}</span>
+              <button type="button" onClick={logout} className="py-3 text-left text-sm uppercase tracking-[0.2em] hover:text-gold">Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" onClick={() => setOpen(false)} className="py-3 text-sm uppercase tracking-[0.2em]">Login</Link>
+              <Link to="/register" onClick={() => setOpen(false)} className="py-3 text-sm uppercase tracking-[0.2em]">Register</Link>
+            </>
+          )}
         </nav>
       )}
     </header>
