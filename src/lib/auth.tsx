@@ -15,6 +15,7 @@ type AuthContextValue = {
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  updatePassword: (password: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -77,8 +78,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     async resetPassword(email) {
       const { error } = await requireSupabase().auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + "/login",
+        redirectTo: window.location.origin + "/reset-password",
       });
+      if (error) throw error;
+    },
+    async updatePassword(password) {
+      const { error } = await requireSupabase().auth.updateUser({ password });
       if (error) throw error;
     },
   };
