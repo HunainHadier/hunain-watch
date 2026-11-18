@@ -87,7 +87,6 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/forgot-password': typeof ForgotPasswordRoute
   '/shop': typeof ShopRoute
   '/product/$id': typeof ProductIdRoute
 }
@@ -99,6 +98,8 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/shop': typeof ShopRoute
   '/product/$id': typeof ProductIdRoute
 }
@@ -124,6 +125,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/register'
+    | '/forgot-password'
+    | '/reset-password'
     | '/shop'
     | '/product/$id'
   fileRoutesByTo: FileRoutesByTo
